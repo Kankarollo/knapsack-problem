@@ -20,7 +20,7 @@ num_offspring = 20  # lambda
 num_breeding_parents = 40  # p
 mutation_chance = 0.4  # Chance of mutation to occur
 
-parent_selection_method = ParentSelection.Fittest
+parent_selection_method = ParentSelection.Tournament
 mutation_type = MutationSelection.Flip
 # End of config
 
@@ -46,12 +46,12 @@ def selection(pops, fitness, num_breeding_parents, parent_selection):
             parents.append(pops[idx])
     elif parent_selection == ParentSelection.Tournament:
         for _ in range(num_breeding_parents):
-            parent1 = pops[np.random.randint(pops.shape)]
-            parent2 = pops[np.random.randint(pops.shape)]
-            if parent1[0].value >= parent2[0].value:
-                parents.append(parent1[0])
+            parent1 = pops[np.random.randint(0, pops.shape[0])]
+            parent2 = pops[np.random.randint(0, pops.shape[0])]
+            if parent1.items[0].value >= parent2.items[0].value:
+                parents.append(parent1)
             else:
-                parents.append(parent2[0])
+                parents.append(parent2)
     elif parent_selection == ParentSelection.Fittest:
         for _ in range(num_breeding_parents):
             parents.append(pops[fitness.index(max(fitness))])
