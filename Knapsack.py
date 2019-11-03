@@ -17,6 +17,7 @@ class Knapsack:
         for item in self.items:
             if item.taken == 1:
                 self.value += item.value
+        return self.value
 
     def compute_mass(self):
         """
@@ -31,6 +32,8 @@ class Knapsack:
             index = np.random.randint(len(self.items))
             if self.items[index].taken == 1:
                 self.items[index].taken = 0
+                self.compute_value()
+                self.compute_mass()
 
     def __str__(self):
         return f'V:{self.value} M:{self.mass}'

@@ -7,6 +7,7 @@ class ParentSelection(Enum):
     Tournament = 3
     Rank = 4
     Random = 5
+    Fittest = 6
 
 
 class MutationSelection(Enum):
