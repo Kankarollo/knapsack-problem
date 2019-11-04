@@ -2,6 +2,9 @@
 # with (mu + lambda) evolution strategy
 # http://www.scholarpedia.org/article/Evolution_strategies
 # https://www.tutorialspoint.com/genetic_algorithms/index.htm
+# Dodac crossover jednorodne (losowy wektor gdzie zachodzi wymiana)
+# mutacja flip, male prawdopodobienstwo
+# selekcja losowa
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -10,13 +13,13 @@ from Knapsack import Knapsack
 from Enums import ParentSelection, MutationSelection
 
 # Config
-N = 100  # Number of items [100, 250, 500]
+N = 500  # Number of items [100, 250, 500]
 capacity = N * 3
 max_value = 20
 max_weight = 10
 
 pop_size = 20  # mu
-epochs = 100
+epochs = 20
 num_offspring = 140  # lambda
 num_breeding_parents = 20  # p
 mutation_chance = 1.0  # Chance of mutation to occur
