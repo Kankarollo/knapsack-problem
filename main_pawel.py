@@ -16,7 +16,7 @@ max_value = 20
 max_weight = 10
 
 pop_size = 20  # mu
-epochs = 200
+epochs = 100
 num_offspring = 140  # lambda
 num_breeding_parents = 20  # p
 mutation_chance = 1.0  # Chance of mutation to occur
@@ -27,6 +27,7 @@ mutation_type = MutationSelection.Flip
 
 def populate(num_genes, pop_size, max_weight, max_value, capacity):
     return np.array([Knapsack(num_genes, max_weight, max_value, capacity) for _ in range(pop_size)])
+
 
 def mutate(pops):
     offspring = []
@@ -67,17 +68,18 @@ def main():
         mutants = mutate(parents)
         pops = new_generation(parents, mutants, max_values, max_mass)
 
-    plt.subplot(2,1,1)
-    plt.plot([value for value in range(epochs)],[value for value in max_values])
+    plt.subplot(2, 1, 1)
+    plt.plot([value for value in range(epochs)], [value for value in max_values])
     plt.ylabel("Values")
     plt.xlabel("Epoch")
 
-    plt.subplot(2,1,2)
-    plt.plot([value for value in range(epochs)],[value for value in max_mass])
+    plt.subplot(2, 1, 2)
+    plt.plot([value for value in range(epochs)], [value for value in max_mass])
     plt.ylabel("Mass")
     plt.xlabel("Epoch")
 
     plt.show()
+
 
 if __name__ == "__main__":
     main()
