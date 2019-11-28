@@ -13,18 +13,17 @@ from Knapsack import Knapsack
 from Enums import ParentSelection, MutationSelection
 
 # Config
-N = 500  # Number of items [100, 250, 500]
-capacity = N * 3
-max_value = 20
-max_weight = 10
+N = 500  # NUMBER OF ITEMS [100, 250, 500]
+CAPACITY = N * 3
+MAX_VALUE = 20
+MAX_WEIGHT = 10
 
-pop_size = 20  # mu
-epochs = 20
-num_offspring = 140  # lambda
-num_breeding_parents = 20  # p
-mutation_chance = 1.0  # Chance of mutation to occur
+POP_SIZE = 20  # MU
+EPOCHS = 20
+NUM_OFFSPRING = 6*POP_SIZE  # LAMBDA
+MUTATION_CHANCE = 0.4  # CHANCE OF MUTATION TO OCCUR
 
-mutation_type = MutationSelection.Flip
+MUTATION_TYPE = MutationSelection.Flip
 # End of config
 
 
@@ -34,19 +33,20 @@ def populate(num_genes, pop_size, max_weight, max_value, capacity):
 
 def mutate(pops):
     offspring = []
-    for _ in range(num_offspring):
+    for _ in range(NUM_OFFSPRING):
         offspring.append(copy.copy(pops[np.random.randint(0,len(pops))]))
     for kid in offspring:
-        if mutation_type == MutationSelection.Flip:
-            index = np.random.randint(0, len(kid.items))
-            if kid.items[index].taken == 0:
-                kid.items[index].taken = 1
-            else:
-                kid.items[index].taken = 0
-            kid.compute_mass()
-            kid.compute_value()
-        elif mutation_type == MutationSelection.Swap:
-            pass
+        if np.random.rand() < MUTATION_CHANCE:
+            if MUTATION_TYPE == MutationSelection.Flip:
+                index = np.random.randint(0, len(kid.items))
+                if kid.items[index].taken == 0:
+                    kid.items[index].taken = 1
+                else:
+                    kid.items[index].taken = 0
+                kid.compute_mass()
+                kid.compute_value()
+            elif MUTATION_TYPE == MutationSelection.Swap:
+                pass
     offspring = np.array(offspring)
     return np.concatenate((offspring, pops))
 
@@ -54,7 +54,7 @@ def mutate(pops):
 def new_generation(parents, offspring, max_values, max_mass):
     temp = list(np.concatenate((parents, offspring)))
     temp.sort(key=lambda x: x.value, reverse=True)
-    generation = np.array(temp[0:pop_size])
+    generation = np.array(temp[0:POP_SIZE])
     max_values.append(generation[0].value)
     max_mass.append(generation[0].mass)
     print(f"{generation[0].value}")
@@ -62,28 +62,34 @@ def new_generation(parents, offspring, max_values, max_mass):
     return generation
 
 
-def main():
-    pops = populate(N, pop_size, max_weight, max_value, capacity)
+def realize_algorithm():
+    pops = populate(N, POP_SIZE, MAX_WEIGHT, MAX_VALUE, CAPACITY)
     max_values = []
     max_mass = []
-    for _ in range(epochs):
+    for _ in range(EPOCHS):
         parents = copy.deepcopy(pops)
         mutants = mutate(parents)
         pops = new_generation(parents, mutants, max_values, max_mass)
+    return pops,max_values,max_mass
 
+
+def show_results(max_values, max_mass):
     plt.subplot(2, 1, 1)
-    plt.plot([value for value in range(epochs)], [value for value in max_values])
+    plt.title("Strategia ewolucyjna")
+    plt.plot([value for value in range(EPOCHS)], [value for value in max_values])
     plt.ylabel("Values")
     plt.xlabel("Epoch")
 
     plt.subplot(2, 1, 2)
-    plt.plot([value for value in range(epochs)], [value for value in max_mass])
+    plt.plot([value for value in range(EPOCHS)], [value for value in max_mass])
     plt.ylabel("Mass")
     plt.xlabel("Epoch")
 
     plt.show()
 
+def main():
+    _, max_values, max_mass = realize_algorithm()
+    show_results(max_values,max_mass)
 
 if __name__ == "__main__":
     main()
-    # test()
