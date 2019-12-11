@@ -22,17 +22,20 @@ MAX_WEIGHT = 10
 POP_SIZE = 20  # MU
 EPOCHS = 50
 NUM_OFFSPRING = 20  # LAMBDA
-NUM_BREEDING_PARENTS = 2*NUM_OFFSPRING  # P
-NUM_TO_MUTATE = 6*POP_SIZE  # LAMBDA
+NUM_BREEDING_PARENTS = 2 * NUM_OFFSPRING  # P
+NUM_TO_MUTATE = 6 * POP_SIZE  # LAMBDA
 MUTATION_CHANCE = 0.4  # CHANCE OF MUTATION TO OCCUR
 
 MUTATION_TYPE = MutationSelection.Flip
 PARENT_SELECTION = ParentSelection.Random
+
+
 # End of config
 
 
 def populate(num_genes, pop_size, max_weight, max_value, capacity):
     return np.array([Knapsack(num_genes, max_weight, max_value, capacity) for _ in range(pop_size)])
+
 
 def compute_fitness(pops):
     fitness = []
@@ -41,17 +44,19 @@ def compute_fitness(pops):
         fitness.append(pop.compute_value())
     return fitness
 
+
 def random_selection(pops, num_breeding_parents, parent_selection):
     parents = []
     if parent_selection == ParentSelection.Random:
         for _ in range(num_breeding_parents):
-            idx = np.random.randint(0,len(pops))
+            idx = np.random.randint(0, len(pops))
             parents.append(pops[idx])
     return parents
 
+
 def uniform_crossover(parents, num_offspring, num_items):
     offspring = []
-    crossover_vector = [np.random.randint(0,2) for _ in range(num_items)] #choose 0 or 1
+    crossover_vector = [np.random.randint(0, 2) for _ in range(num_items)]  # choose 0 or 1
     for _ in range(num_offspring):
         parentA = parents.pop().items
         parentB = parents.pop().items
@@ -67,7 +72,7 @@ def uniform_crossover(parents, num_offspring, num_items):
 def mutate(pops, num_to_mutate):
     offspring = []
     for _ in range(num_to_mutate):
-        offspring.append(copy.copy(pops[np.random.randint(0,len(pops))]))
+        offspring.append(copy.copy(pops[np.random.randint(0, len(pops))]))
     for kid in offspring:
         if np.random.rand() < MUTATION_CHANCE:
             if MUTATION_TYPE == MutationSelection.Flip:
@@ -94,7 +99,8 @@ def new_generation(parents, offspring, max_values, max_mass,average_value,averag
     print(f"{generation[0].value}")
     np.random.shuffle(generation)
     return generation
-
+  
+  
 def calculate_average_value(average_value, average_mass, generation):
     sum_value = 0.0
     sum_mass = 0.0
@@ -112,7 +118,7 @@ def realize_algorithm():
     average_mass = []
     for _ in range(EPOCHS):
         old_generation = copy.deepcopy(pops)
-        parents = random_selection(old_generation,NUM_BREEDING_PARENTS,PARENT_SELECTION)
+        parents = random_selection(old_generation, NUM_BREEDING_PARENTS, PARENT_SELECTION)
         offspring = uniform_crossover(parents, NUM_OFFSPRING, NUMBER_OF_ITEMS)
         mutants = mutate(offspring, NUM_TO_MUTATE)
         pops = new_generation(old_generation, mutants, max_values, max_mass,average_value,average_mass)
@@ -138,6 +144,7 @@ def show_results(max_values,max_mass,average_value,average_mass):
     plt.legend(["Wartość przystosowania najlepszych osobników.", "Wartość średniego przystosowania"])
 
     plt.show()
+
 
 def main():
     _, max_values, max_mass,average_value,average_mass = realize_algorithm()
