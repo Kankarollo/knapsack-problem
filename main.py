@@ -105,8 +105,3 @@ for epoch in range(epochs):
     offspring = crossover(parents, num_offspring, N)
     mutants = mutate(offspring, mutation_chance, mutation_type)
     pops = new_generation(pops, mutants)
-    # for i in range(pop_size):
-    #     plt.scatter(pops[i].value, pops[i].mass)
-    # plt.savefig(f'fig_{epoch}.png')
-    # plt.show()
-    # plt.clf()
