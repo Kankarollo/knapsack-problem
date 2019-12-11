@@ -20,7 +20,7 @@ MAX_VALUE = 20
 MAX_WEIGHT = 10
 
 POP_SIZE = 20  # MU
-EPOCHS = 20
+EPOCHS = 50
 NUM_OFFSPRING = 20  # LAMBDA
 NUM_BREEDING_PARENTS = 2*NUM_OFFSPRING  # P
 NUM_TO_MUTATE = 6*POP_SIZE  # LAMBDA
@@ -124,7 +124,7 @@ def show_results(max_values,max_mass,average_value,average_mass):
     plt.subplot(2, 1, 1)
     plt.title("Strategia ewolucyjna z wybraniem rodzica")
     plt.plot([value for value in range(EPOCHS)], [value for value in max_values])
-    plt.plot([value for value in range(EPOCHS)], [value for value in average_value])
+    plt.plot([value for value in range(EPOCHS)], [value for value in average_value], '--')
     plt.ylabel("Values")
     plt.xlabel("Epoch")
     plt.legend(["Wartość przystosowania najlepszych osobników.", "Wartość średniego przystosowania"])
@@ -132,7 +132,7 @@ def show_results(max_values,max_mass,average_value,average_mass):
 
     plt.subplot(2, 1, 2)
     plt.plot([value for value in range(EPOCHS)], [value for value in max_mass])
-    plt.plot([value for value in range(EPOCHS)], [value for value in average_mass])
+    plt.plot([value for value in range(EPOCHS)], [value for value in average_mass],'--')
     plt.ylabel("Mass")
     plt.xlabel("Epoch")
     plt.legend(["Wartość przystosowania najlepszych osobników.", "Wartość średniego przystosowania"])
